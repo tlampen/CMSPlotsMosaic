@@ -74,4 +74,5 @@ for d in sorted(os.listdir(SRC)):
         if f['appendix']: s -= 4
         f['score'] = round(s, 2); f['idx'] = k + 1
     res[d] = {'main': os.path.basename(main), 'title': re.sub(r'\s+', ' ', title), 'figs': figs}
+os.makedirs(os.path.dirname(os.path.abspath(OUT)), exist_ok=True)
 json.dump(res, open(OUT, 'w'), indent=1)

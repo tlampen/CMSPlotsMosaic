@@ -28,6 +28,7 @@ def resolve(d, fn):
         for c in [base] + [base + e for e in EXT]:
             if c in files: return os.path.relpath(os.path.join(root, c), SRC)
     return None
+os.makedirs(f'{HERE}/extra_cand', exist_ok=True)
 out = []
 for d in sorted(k for k, v in r.items() if 'error' not in v and k not in sel):
     if r[d]['figs']:
