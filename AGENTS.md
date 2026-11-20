@@ -1,6 +1,6 @@
 # AGENTS.md — CMSPlotsMosaic
 
-Instructions for AI coding agents working in this folder. It holds the mosaic "CMS physics in 1530 plots": the CMS
+Instructions for AI coding agents working in this folder. It holds the mosaic "CMS physics in 1534 plots": the CMS
 logo drawn as a 40×40 grid of plots taken from CMS papers, with a text box and a clickable PDF.
 The full method is in `README.md` — read it before changing anything.
 
@@ -10,7 +10,7 @@ The full method is in `README.md` — read it before changing anything.
 | `scripts/CMSPlotsMosaic.py` | matching (which plot goes where) and drawing, including the text box, logo and QR code |
 | `scripts/extract.py`, `select_papers.py`, `candidates.py` | first steps: figures and captions of every paper, paper selection, caption filters |
 | `scripts/render_candidates.py`, `measure_candidates.py` | 60 dpi renders of the candidate plots, and their measurements |
-| `scripts/extra_candidates.py` | candidate plots of the papers outside the 1521-paper selection |
+| `scripts/extra_candidates.py` | candidate plots of the papers outside the 1525-paper selection |
 | `scripts/tile_thumbs.py` | builds the plot pool and its 16×16 thumbnails (`tile_thumbs.npz`); also holds `cell_size`, the rule for fitting a plot into a cell |
 | `scripts/contact_sheets.py` | sheets of newly chosen plots for the check by eye |
 | `scripts/make_small.py`, `fetch_titles.py`, `make_pdf.py` | small copy of an image; paper titles from arXiv (`titles.json`); the PDF with links and hover titles |
@@ -58,7 +58,7 @@ The full build order, from the paper sources on, is in `README.md`.
    chosen.
 5. **Fixed properties** (change only if the user asks): 40×40 grid; white background; no plot twice; exactly one plot
    from every paper that has a usable plot; the one exception is arXiv:1207.7235, whose two Higgs discovery plots
-   (four-lepton and diphoton mass) sit side by side in a black frame; text box in the top right corner (10×7 cells,
+   (four-lepton and diphoton mass) sit side by side in a black frame; text box in the top right corner (11×6 cells, 11 wide and 6 high,
    one row of plots above and one column to the right).
    The numbers must add up: cells outside the blank rectangle = papers + 1. If the pool or the rectangle changes,
    the script stops with a message; do not fix this with duplicates.

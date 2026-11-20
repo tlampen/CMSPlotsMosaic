@@ -1,8 +1,8 @@
-"""Candidate plots of the papers that are in cms_sources/ but not in the 1521-paper selection of the logo-grid
+"""Candidate plots of the papers that are in cms_sources/ but not in the 1525-paper selection of the logo-grid
 pipeline (work/selection.txt), for the all-papers mosaic.
 
 Two kinds of papers:
-  * with figures in work/figs.json (cut only because the selection is "the newest 1521"): their figures, minus
+  * with figures in work/figs.json (cut only because the selection is "the newest 1525"): their figures, minus
     those whose caption matches the HARD filter of scripts/candidates.py (drawings, diagrams, photos ...)
   * where scripts/extract.py found no figure (old LaTeX with \\epsfig/\\psfig, or figures in included files):
     every image file of the paper folder (pdf, eps, ps, epsi, png, jpg), no caption; non-plots are removed by eye

@@ -160,6 +160,7 @@
 2510.07527__6  # jet sketch
 2511.08212__6  # layer sketch
 2511.11853__3__0  # schematic of analysis regions
+2604.09809__2  # table of jet topologies with sketches
 hep-ex_0007045__1__0  # detector drawing
 hep-ex_0007045__2__0  # detector drawing
 hep-ex_0007045__37__0  # sketch

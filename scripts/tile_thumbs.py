@@ -1,7 +1,7 @@
 """16x16 thumbnails of every physics-plot candidate AS IT IS DRAWN IN ITS SQUARE CELL, for the mosaic "CMS physics in 1530 plots".
 
 Pool = work/cands.json (panels that passed the HARD caption filter and the BLACK list) PLUS extra_cands.json (plots of
-the papers outside the 1521-paper selection, see extra_candidates.py) whose measurements in work/candcolours.json /
+the papers outside the 1525-paper selection, see extra_candidates.py) whose measurements in work/candcolours.json /
 extra_colours.json pass the photo / legend checks (aspect 0.4-3, ink > 3%, white inside > 5%).
 A paper with no plot passing the aspect limit gets its plots with aspect up to 3.5 (one paper: 2005.14219).
 How a plot is put into the square cell (same rule in CMSPlotsMosaic.py):
