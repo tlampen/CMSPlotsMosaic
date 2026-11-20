@@ -17,14 +17,9 @@ from concurrent.futures import ThreadPoolExecutor
 SCR = os.path.dirname(os.path.abspath(__file__)); HERE = os.path.dirname(SCR)   # scripts/ and the mosaic folder
 W = f'{HERE}/work'; SRC = f'{HERE}/cms_sources'
 S, B, AMIN, AMAX = 16, 64, 0.85, 1.18
-cands = json.load(open(f'{W}/cands.json')) + json.load(open(f'{HERE}/extra_cands.json'))
-cc = json.load(open(f'{W}/candcolours.json')); cc.update(json.load(open(f'{HERE}/extra_colours.json')))
 def png(k): return f'{W}/cand/{k}.png' if os.path.exists(f'{W}/cand/{k}.png') else f'{HERE}/extra_cand/{k}.png'
 def ok(m, amax): return m and 0.4 < m['aspect'] < amax and m['ink'] > 0.03 and m['white_in'] > 0.05
 key = lambda c: f"{c['paper']}__{c['fig']}__{c['panel']}"
-have = {c['paper'] for c in cands if ok(cc.get(key(c)), 3.0)}
-keep = [(key(c), c.get('soft', False), c['main']) for c in cands
-        if ok(cc.get(key(c)), 3.0 if c['paper'] in have else 3.5) and os.path.exists(png(key(c)))]
 
 def crop_ink(im):
     bb = ImageChops.difference(im, Image.new('RGB', im.size, 'white')).convert('L').point(lambda v: 255 if v > 20 else 0).getbbox()
@@ -42,7 +37,12 @@ def feat(item):
         w, h = cell_size(a, B); sq = Image.new('RGB', (B, B), 'white'); sq.paste(im.resize((w, h), Image.BOX), ((B - w) // 2, (B - h) // 2))
         return k, np.asarray(sq.resize((S, S), Image.BOX), np.uint8), a, w * h / B / B
     except Exception: return None
-if __name__ == '__main__':
+if __name__ == '__main__':                                       # the pool is built only when run as a script (CMSPlotsMosaic.py imports cell_size)
+    cands = json.load(open(f'{W}/cands.json')) + json.load(open(f'{HERE}/extra_cands.json'))
+    cc = json.load(open(f'{W}/candcolours.json')); cc.update(json.load(open(f'{HERE}/extra_colours.json')))
+    have = {c['paper'] for c in cands if ok(cc.get(key(c)), 3.0)}
+    keep = [(key(c), c.get('soft', False), c['main']) for c in cands
+            if ok(cc.get(key(c)), 3.0 if c['paper'] in have else 3.5) and os.path.exists(png(key(c)))]
     with ThreadPoolExecutor(8) as ex: res = [r for r in ex.map(feat, keep) if r]
     meta = {k: (s, m) for k, s, m in keep}
     np.savez_compressed(f'{HERE}/tile_thumbs.npz', keys=np.array([r[0] for r in res]), T=np.array([r[1] for r in res], np.uint8),

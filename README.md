@@ -23,7 +23,7 @@ Built 2026-11-18 by Claude Code (model Fable 5.2).
 | `CMSPlotsMosaic_hires.png` | 6400×6400 (160 px per cell) | 32734 KB | `4519fc764632f195…` |
 | `CMSPlotsMosaic.png` | 1920×1920 (48 px per cell) | 4521 KB | `542f0f57f05024b1…` |
 | `CMSPlotsMosaic_small.png` | 1400×1400, 256 colours, under 1 MB | 897 KB | `ee2d2b95ffc62268…` |
-| `CMSPlotsMosaic.pdf` | clickable PDF with hover titles, one page 40×40 cm | 20517 KB | `b1065f8a31851289…` |
+| `CMSPlotsMosaic.pdf` | clickable PDF with hover titles, one page 40×40 cm | 20517 KB | `152d36b05ec64de5…` |
 | `assignment_40.json` | row, column, plot of every cell; all settings | 72 KB | `939d76d1a94c1254…` |
 | `tile_thumbs.npz` | 16×16 thumbnails of the 31,095 pool plots | 9011 KB | `ca51c6bb51b69a17…` |
 | `titles.json` | paper titles from the arXiv API | 204 KB | `5e15616b4f021dec…` |
@@ -37,8 +37,8 @@ Everything needed is inside this folder:
 - data: `main_picks.txt`, `exclude.txt` (178 figures removed by eye), `checked.txt` (5282 plots looked at),
   `extra_cands.json`, `extra_colours.json`, `extra_cand/`, `textbox.json` (position of the QR code), `fonts/`.
 
-## Getting the papers (`fetch_CMSPapers_inspire.py` → `cms_papers.json`, `cms_sources/`)
-This step comes before everything below: it makes the list of CMS papers and downloads their sources.
+## Getting the papers (`fetch_CMSPapers_inspire.py` → `cms_papers.json`, `cms_sources/`, `cms_pdfs/` )
+This step comes before everything below: it makes the list of CMS papers and downloads their sources to directory cms_sources. 
 - The script asks INSPIRE (`https://inspirehep.net/api/literature`) for the published CMS papers in hep-ex: query
   `report_numbers.value:CMS-* and arxiv_eprints.categories:hep-ex and tc published`, newest first, 250 per page,
   fields titles, abstracts, arXiv ids, DOIs and report numbers.
@@ -61,9 +61,9 @@ The mosaic needs only the sources (`src`), not the PDFs. After new papers arrive
 again from step 1, and the grid and blank rectangle may need to change (cells outside the rectangle = papers + 1).
 
 ## Inputs
-- `cms_sources` — a symbolic link to the folder with the paper sources: one folder per paper (1530 folders), named
+- `cms_sources` — a folder with the paper sources created by the fetch script : one folder per paper (1530 folders), named
   by arXiv id (`1207.7235`; old style `hep-ex_0012003`), holding the paper's LaTeX source and figure files as
-  downloaded from arXiv. **This is the only thing the folder needs from outside.**
+  downloaded from arXiv.
 - `CMSlogo.png` — 1024×1024 RGBA; square, 8 px black outline, light-blue / yellow / green areas, red particle
   tracks, navy letters "CMS", white top right part.
 - `main_picks.txt` — hand-made list of main-result panels of 145 papers (lines `id figure panel`), used in step 2.
@@ -87,7 +87,7 @@ python3 -I scripts/make_small.py CMSPlotsMosaic_hires.png CMSPlotsMosaic_small.p
 python3 -I scripts/fetch_titles.py           # step 14 (needs network: export.arxiv.org)
 python3 -I scripts/make_pdf.py               # step 15
 ```
-Without `--reassign` the mosaic script reuses `assignment_40.json` and only draws. All settings are the script's
+Without `--reassign` the mosaic script reuses `assignment_40.json` and only draws. Drawing needs only steps 1–3 (`work/cands.json`) and the 60 dpi renders of the 1530 chosen plots (in `work/cand/`, or `extra_cand/` for the papers of step 5), made with the commands of step 4; it does not need `candcolours.json` or `tile_thumbs.npz` (`tile_thumbs.py` builds the pool only when run as a script, so `cell_size` can be imported). Steps 1–3 must see exactly the 1530 paper folders of this build: newer folders in `cms_sources` change the 1521-paper selection, so pass a folder of links to the 1530 folders as `extract.py SRC work/figs.json` and `candidates.py work SRC`. All settings are the script's
 defaults and are stored in `assignment_40.json` → `params`. The improvement step uses numpy's `default_rng(1)`.
 Checked on 2026-11-19 by running every step in this folder: steps 1–3, 5, 6 and the assignment reproduce the stored
 files exactly, 300 re-measured renders agree, and the hi-res image is byte-identical. (The PDF differs only in its

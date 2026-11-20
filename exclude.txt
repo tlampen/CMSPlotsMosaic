@@ -1,0 +1,179 @@
+# figures left out of the plot pool, found by eye (key = paper__figure__panel, or paper__figure for all panels  # reason)
+0805.3816__1__0  # plot of another experiment (ATLAS)
+0901.4840__4__0  # plot of another experiment (ATLAS)
+0901.4840__5__0  # plot of another experiment (ATLAS)
+0901.4840__6__0  # plot of another experiment (ATLAS)
+0901.4840__7__0  # plot of another experiment (ATLAS)
+0901.4840__8__0  # plot of another experiment (ATLAS)
+0901.4840__9__0  # plot of another experiment (ATLAS)
+0906.3563__2__0  # event display
+1211.3143__2  # region drawing
+1303.0763__3__5  # legend only
+1303.0763__7__2  # legend only
+1401.5041__4__0  # table of event categories
+1404.3572__10__1  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__11__0  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__12__0  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__13__0  # plot of another experiment (D0)
+1404.3572__13__1  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__15__0  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__15__1  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__16__1  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__1__0  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__1__1  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__2__0  # plot of another experiment
+1404.3572__2__1  # plot of another experiment (CDF)
+1404.3572__3__0  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__3__1  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__4__0  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__4__1  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__5__0  # plot of another experiment (CDF)
+1404.3572__6__0  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__8__0  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__8__1  # review paper: plot of another experiment, a theory plot or a summary table
+1404.3572__9__0  # review paper: plot of another experiment, a theory plot or a summary table
+1405.3455__1  # Feynman diagrams
+1408.1682__2__2  # legend only
+1411.4413__10__0  # Feynman diagram
+1411.4413__11__0  # Feynman diagram
+1411.4413__12__0  # Feynman diagram
+1411.4413__13__0  # Feynman diagram
+1411.4413__14__0  # Feynman diagram
+1411.4413__3__0  # detector / event-display picture
+1411.4413__4__0  # detector / event-display picture
+1411.4413__8__0  # Feynman diagram
+1411.4413__9__0  # Feynman diagram
+1411.7255__1  # Feynman diagrams
+1502.04358__1  # region drawing
+1502.04994__4  # region sketch
+1606.02266__10__0  # Feynman diagram
+1606.02266__11__0  # Feynman diagram
+1606.02266__12__0  # Feynman diagram
+1606.02266__13__0  # Feynman diagram
+1606.02266__14__0  # Feynman diagram
+1606.02266__15__0  # Feynman diagram
+1606.02266__16__0  # Feynman diagram
+1606.02266__17__0  # Feynman diagram
+1606.02266__1__0  # Feynman diagram
+1606.02266__2__0  # Feynman diagram
+1606.02266__3__0  # Feynman diagram
+1606.02266__4__0  # Feynman diagram
+1606.02266__5__0  # Feynman diagram
+1606.02266__6__0  # Feynman diagram
+1606.02266__7__0  # Feynman diagram
+1606.02266__8__0  # Feynman diagram
+1606.02266__9__0  # Feynman diagram
+1610.07572__3  # diagram
+1612.07291__1  # detector drawing
+1612.07291__2  # detector cross-section drawing
+1612.07291__4  # 3D detector drawing
+1705.02628__1__0  # sketch of event topologies
+1710.02846__1  # reference-frame sketches
+1712.08920__5__1  # table
+1801.03535__1__0  # sketch of vectors
+1803.02864__3__0  # scheme of regions
+1803.11133__1  # Feynman diagram
+1804.01939__1__0  # sketch of decay angles
+1804.01939__1__1  # sketch of decay angles
+1804.03682__4  # flowchart
+1807.02810__1__0  # single simulated event
+1903.01216__3  # event displays
+1903.01216__3__0  # event display
+1903.06564__5__0  # detector drawing
+1904.08986__7  # diagram
+1904.08986__8  # diagram
+1907.07235__1  # sketch
+1911.03781__1__0  # mass-hierarchy scheme
+1911.07558__2  # slide
+2001.02023__2  # sketch
+2001.02023__3  # detector drawing
+2001.02023__4  # detector drawing
+2001.04521__3  # region scheme
+2003.11092__4  # module drawing
+2006.10165__23__0  # schematic of detector cells
+2011.01185__25__1  # detector view with hits (event-display-like)
+2012.06336__11__0  # drawing
+2012.06336__13__0  # photo
+2012.06336__15__0  # photo or diagram
+2012.06336__16__0  # photo or diagram
+2012.06336__17__0  # photo or diagram
+2012.06336__18__0  # photo or diagram
+2012.06336__19__0  # photo or diagram
+2012.06336__1__0  # drawing
+2012.06336__20__0  # photo or diagram
+2012.06336__22__0  # photo / block diagram
+2012.06336__23__0  # photo / block diagram
+2012.06336__47__0  # sketch
+2012.06336__4__0  # drawing or photo
+2012.06336__5__0  # drawing or photo
+2012.06336__6__0  # drawing or photo
+2012.06336__7__0  # drawing or photo
+2012.06336__8__0  # drawing or photo
+2102.04524__1  # vertex sketch
+2104.12152__2__0  # Feynman diagram
+2104.12152__5  # Feynman diagrams
+2105.14027__23__0  # mostly a text legend
+2107.02157__2  # sketch
+2107.02157__3__2  # legend only
+2202.04499__2  # shapes sketch
+2202.04499__4__0  # event-image-like picture
+2202.04499__4__1  # event-image-like picture
+2202.04499__8  # pixel patterns
+2202.06923__11__0  # legend only
+2205.00961__2  # detector drawing
+2205.00961__4__0  # detector drawing
+2208.02686__5__1  # nearly empty panel
+2210.02489__17  # readout pattern
+2210.02489__1__0  # layout scheme
+2210.02489__4  # flowchart
+2210.08325__1  # illustration
+2306.10355__1__0  # detector drawing
+2307.16216__3  # module number map
+2309.05466__115  # module drawing
+2309.05466__79  # detector rendering
+2310.19893__3__0  # schematic of analysis regions
+2312.07562__1  # box diagram
+2405.17605__2  # selection scheme
+2405.18661__2__0  # detector drawing
+2406.11937__2__0  # detector drawing
+2407.13721__10__0  # sketch
+2407.13721__13  # sketch
+2407.13721__16__0  # drawing-like material map of a chip
+2407.13721__16__1  # drawing-like material map of a chip
+2407.13721__4__0  # sensor image
+2407.13721__8  # sketches
+2412.00570__1  # region scheme
+2412.03747__1  # diagram
+2412.15413__6__7  # legend only
+2502.07525__1  # block diagram
+2503.20033__3  # table diagram
+2503.20033__5  # flowchart
+2504.08507__14__0  # stand-alone legend (same panel as the two above)
+2504.08507__15__0  # stand-alone legend (same panel as the two above)
+2504.08507__16__0  # stand-alone legend
+2504.08507__17__0  # stand-alone legend
+2504.08507__18__0  # stand-alone legend
+2504.08507__24__0  # stand-alone legend (same panel as the two above)
+2506.17195__2__0  # layout scheme
+2506.17195__32  # geometry sketch
+2508.06947__1  # sketch
+2510.07527__6  # jet sketch
+2511.08212__6  # layer sketch
+2511.11853__3__0  # schematic of analysis regions
+hep-ex_0007045__1__0  # detector drawing
+hep-ex_0007045__2__0  # detector drawing
+hep-ex_0007045__37__0  # sketch
+hep-ex_0007045__39__0  # detector drawing
+hep-ex_0007045__3__0  # detector drawing
+hep-ex_0007045__40__0  # detector drawing
+hep-ph_9806366__19__0  # detector drawing
+hep-ph_9806366__1__0  # empty image
+hep-ph_9806366__24__0  # empty image / level scheme
+hep-ph_9806366__25__0  # empty image / level scheme
+hep-ph_9806366__26__0  # empty image / level scheme
+hep-ph_9806366__29__0  # empty image
+hep-ph_9806366__35__0  # flow diagram
+hep-ph_9806366__37__0  # text
+hep-ph_9806366__93__0  # empty image
+hep-ph_9806366__95__0  # empty image
+hep-ph_9806366__9__0  # sketch
