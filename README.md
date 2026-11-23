@@ -23,8 +23,9 @@ Built 2026-11-20 by Claude Code (model Opus 5.5), with the scripts written earli
 |---|---|---|---|
 | `CMSPlotsMosaic_hires.png` | 6400×6400 (160 px per cell) | 32810 KB | `bab2cc6f440154d0…` |
 | `CMSPlotsMosaic.png` | 1920×1920 (48 px per cell) | 4531 KB | `ab9fedf82ae9eb5d…` |
-| `CMSPlotsMosaic_small.png` | 1400×1400, 256 colours, under 1 MB | 899 KB | `76b2e284dec5866c…` |
-| `CMSPlotsMosaic.pdf` | clickable PDF with hover titles, one page 40×40 cm | 20572 KB | `aa156532c86fbd55…` |
+| `CMSPlotsMosaic_lowres.png` | 1400×1400, 256 colours, under 1 MB | 899 KB | `76b2e284dec5866c…` |
+| `CMSPlotsMosaic.pdf` | clickable PDF with hover titles, one page 40×40 cm | 20572 KB | `29e139231807889e…` |
+| `CMSPlotsMosaic_vector.pdf` | optional (step 16): the same page as vector graphics, with links and hover titles | 67038 KB | `19b0390cc7a40ac5…` |
 | `assignment_40.json` | row, column, plot of every cell; all settings | 73 KB | `0bcdb5e8ba453793…` |
 | `tile_thumbs.npz` | 16×16 thumbnails of the 31,184 pool plots | 9034 KB | `7e8599de4fba05f2…` |
 | `titles.json` | paper titles from the arXiv API | 205 KB | `89355daff2b13b2a…` |
@@ -32,11 +33,11 @@ Built 2026-11-20 by Claude Code (model Opus 5.5), with the scripts written earli
 Everything needed is inside this folder:
 - `scripts/` — all scripts: `extract.py`, `select_papers.py`, `candidates.py`, `render_candidates.py`,
   `measure_candidates.py`, `extra_candidates.py`, `tile_thumbs.py`, `CMSPlotsMosaic.py`, `contact_sheets.py`,
-  `make_small.py`, `fetch_titles.py`, `make_pdf.py`. Each finds the folder from its own location.
+  `make_lowres.py`, `fetch_titles.py`, `make_pdf.py`, `make_vector_pdf.py` (optional). Each finds the folder from its own location.
 - `work/` — intermediate results: `figs.json`, `selection.txt`, `cands.json`, `candcolours.json`, `cand/` (60 dpi
   renders), `render_cache/`, and optionally `hi/` (130 dpi renders, see step 4; not present for this build). All can be rebuilt.
 - data: `main_picks.txt`, `exclude.txt` (179 figures removed by eye), `checked.txt` (5295 plots looked at),
-  `extra_cands.json`, `extra_colours.json`, `extra_cand/`, `textbox.json` (position of the QR code), `fonts/`.
+  `extra_cands.json`, `extra_colours.json`, `extra_cand/`, `textbox.json` (layout of the text box), `fonts/`.
 
 ## Getting the papers (`fetch_CMSPapers_inspire.py` → `cms_papers.json`, `cms_sources/`, `cms_pdfs/` )
 This step comes before everything below: it makes the list of CMS papers and downloads their sources to directory cms_sources. 
@@ -84,9 +85,10 @@ python3 -I scripts/CMSPlotsMosaic.py --reassign --tile_px 160 --out CMSPlotsMosa
 python3 -I scripts/contact_sheets.py SOMEDIR # step 13; repeat the line above until nothing new
 python3 -I scripts/CMSPlotsMosaic.py --tile_px 48 --out CMSPlotsMosaic.png
 python3 -I scripts/CMSPlotsMosaic.py --tile_px 160 --out CMSPlotsMosaic_hires.png   # last, so textbox.json fits the hi-res image
-python3 -I scripts/make_small.py CMSPlotsMosaic_hires.png CMSPlotsMosaic_small.png
+python3 -I scripts/make_lowres.py CMSPlotsMosaic_hires.png CMSPlotsMosaic_lowres.png
 python3 -I scripts/fetch_titles.py           # step 14 (needs network: export.arxiv.org)
 python3 -I scripts/make_pdf.py               # step 15
+python3 -I scripts/make_vector_pdf.py        # step 16, optional (about 5 min the first time, then about 1 min)
 ```
 Without `--reassign` the mosaic script reuses `assignment_40.json` and only draws. Drawing needs only steps 1–3 (`work/cands.json`) and the 60 dpi renders of the 1534 chosen plots (in `work/cand/`, or `extra_cand/` for the papers of step 5), made with the commands of step 4; it does not need `candcolours.json` or `tile_thumbs.npz` (`tile_thumbs.py` builds the pool only when run as a script, so `cell_size` can be imported). Steps 1–3 must see exactly the 1534 paper folders of this build: newer folders in `cms_sources` change the 1525-paper selection, so pass a folder of links to the 1534 folders as `extract.py SRC work/figs.json` and `candidates.py work SRC`. All settings are the script's
 defaults and are stored in `assignment_40.json` → `params`. The improvement step uses numpy's `default_rng(1)`.
@@ -255,7 +257,9 @@ around the two cells, inside them.
 - Credit line, bottom left beside the logo (wrapped to the width left of it minus 0.4 u), 0.21 u, colour (90,90,90): "Plots: CMS Collaboration, from the arXiv
   sources of the papers. Arrangement computed with Claude (Fable 5.2), 20 November 2026. More about CMS:
   home.cern/science/experiments/cms" (date from `--date`).
-- The numbers 1534 and 1533 are taken from the assignment. The position of the QR code is written to `textbox.json`.
+- The numbers 1534 and 1533 are taken from the assignment. `textbox.json` gets the QR box as fractions of the picture (for step 15) and the whole text box in pixels of the drawn
+  image (for step 16): picture size, cell, gap and frame widths, the line around the box, every text line (position of
+  its top-left ascender point, font file, size, colour, text), the QR modules and position, and the logo's position.
 
 "Shown as published" refers to colours and content; plots are scaled, and nearly square ones are drawn as exact squares.
 
@@ -277,6 +281,32 @@ and on top an invisible push-button form field with the same URI action and the 
 hover text in Acrobat, Chrome and Firefox. Plus a link on the QR code. Checked by reading the PDF back: 1534 links and
 1534 buttons, each on the cell of its paper with that paper's title (0 mismatches). Not tested by hand in a viewer.
 
+## 16. Vector PDF, optional (`make_vector_pdf.py` → `CMSPlotsMosaic_vector.pdf`)
+Not part of the default build. Same page (40×40 cm) and layout as the hi-res PNG, but each plot is its source drawing:
+- **Sources:** a PDF source's first page is embedded as a form XObject (vector graphics and fonts as in the source;
+  1519 plots). EPS / PS files are first converted with Ghostscript (`gs -dSAFER -dEPSCrop -sDEVICE=pdfwrite`); a plain
+  PS file (no `EPSF` in its first line) that has a `%%BoundingBox` gets that box as its page, as ImageMagick does
+  (one plot, `0901.4840__12__0`). Bitmaps (png, jpg; 15 plots) are embedded at full size, cropped to their ink, losslessly.
+- **Ink box:** the page rendered with `pdftoppm -r 150` (media box, page rotation applied — 1044 of the source pages
+  have `/Rotate 90`), bounding box of pixels differing from white by more than 20 of 255, in points. Cached per plot in
+  `work/vector_cache/KEY.json` (plus the converted EPS / PS files and the cropped bitmaps).
+- **Placement:** the PNG's rule of step 6 / 11 in hi-res pixels, without rounding: cell u = 160, gap 6, frame 16
+  (from `textbox.json`); side s = u − gap (− 2 × frame for the forced pair), centred; aspect of the ink box → `cell_size`.
+  The plot is clipped to its rectangle and mapped onto it by one matrix (page rotation, ink box → rectangle; nearly
+  square plots are stretched to exact squares as in the PNG). Pixels → points: 40 cm / 6400.
+- **Text box, frame:** from `textbox.json`: the line around the box and the black frame of the forced pair as stroked
+  rectangles, the text as PDF text in the embedded DejaVu fonts (baseline = top + font ascent), the QR code as one
+  filled path, the CMS logo as the original 1024 px image (on white).
+- **Links:** the same link annotations and hover buttons as step 15 (`make_pdf.add_links`).
+
+Checks (rendered with `pdftoppm` at 6400×6400 and compared with `CMSPlotsMosaic_hires.png`): the ink box of every cell
+agrees to 1 px of 160 for 95 % of the cells, 4 cells differ by more than 3 px (largest 11 px: light lines or edges
+that one rendering counts as ink and the other not); text box mean difference 3.6 of 255. 1534 links and 1534 buttons
+on the right cells (0 mismatches); `pikepdf` structure check without problems. The Higgs pair, rendered at 2400 dpi,
+is sharp. Thin lines and hatch patterns look darker than in the PNG when the whole page is viewed small (a
+viewer draws a line at least one screen pixel wide; the PNG averages it away); zoomed in they are as in the papers.
+13 of the source PDFs make poppler print font warnings (also when rendered on their own).
+
 ## Result
 Whole image shrunk to 64 px wide against the logo shrunk the same way: mean RGB distance 84.5, brightness (mean of R, G, B)
 correlation 0.58 (the text box is part of the image but not of the logo).
@@ -286,8 +316,10 @@ correlation 0.58 (the text box is part of the image but not of the logo).
 - Plots are mostly white, so the light-blue area is uneven and the letters are only moderately clear.
 - The QR code was made by a standard library but not test-scanned.
 - The under-1 MB copy has 256 colours; its small text is hard to read.
+- The vector PDF is large (67 MB) and slow to draw: `pdftoppm` needs about 2.5 min for the whole page at 6400×6400;
+  viewers may be slow when zoomed out. It was not opened in Acrobat, a browser or a print workflow.
 
 ## Software
 Not in the folder (must be installed): python 3.12.3, numpy 1.26.4, scipy 1.11.4, Pillow 10.2.0, qrcode, reportlab,
-pikepdf; pdftoppm (poppler),
+pikepdf; pdftoppm (poppler), Ghostscript `gs` (step 16),
 ImageMagick `convert` (with Ghostscript for eps/ps).

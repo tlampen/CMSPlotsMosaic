@@ -13,15 +13,16 @@ The full method is in `README.md` — read it before changing anything.
 | `scripts/extra_candidates.py` | candidate plots of the papers outside the 1525-paper selection |
 | `scripts/tile_thumbs.py` | builds the plot pool and its 16×16 thumbnails (`tile_thumbs.npz`); also holds `cell_size`, the rule for fitting a plot into a cell |
 | `scripts/contact_sheets.py` | sheets of newly chosen plots for the check by eye |
-| `scripts/make_small.py`, `fetch_titles.py`, `make_pdf.py` | small copy of an image; paper titles from arXiv (`titles.json`); the PDF with links and hover titles |
+| `scripts/make_lowres.py`, `fetch_titles.py`, `make_pdf.py` | low-resolution copy of an image; paper titles from arXiv (`titles.json`); the PDF with links and hover titles |
+| `scripts/make_vector_pdf.py` | optional: the same PDF as vector graphics (`CMSPlotsMosaic_vector.pdf`); not made by default |
 | `work/` | intermediate results and render caches (1.6 GB); can be rebuilt |
 | `cms_sources` | symbolic link to the paper sources: one folder per paper (arXiv id). **Read-only; the only thing outside this folder.** |
 | `CMSlogo.png`, `main_picks.txt`, `fonts/` | inputs: the logo, hand-made main-result picks, the text box fonts. Do not change. |
 | `exclude.txt` | figures removed by eye (key  # reason) |
 | `checked.txt` | plots already looked at and accepted |
 | `assignment_40.json` | the result: row, column and plot of every cell, plus all settings |
-| `textbox.json` | position of the QR code, written when the picture is drawn |
-| `CMSPlotsMosaic*.png`, `.pdf` | the outputs |
+| `textbox.json` | layout of the text box (QR box, text lines, line, logo), written when the picture is drawn |
+| `CMSPlotsMosaic_hires.png`, `CMSPlotsMosaic.png`, `_lowres.png`, `.pdf`, `_vector.pdf` | the outputs (6400, 1920 and 1400 px images; clickable PDF; optional vector PDF) |
 
 The folder is self-contained: every script finds the folder from its own location and reads nothing outside it
 except through the `cms_sources` link.
@@ -31,15 +32,16 @@ Run in this folder, and always start Python with `-I`:
 ```bash
 python3 -I scripts/CMSPlotsMosaic.py --tile_px 48 --out CMSPlotsMosaic.png
 python3 -I scripts/CMSPlotsMosaic.py --tile_px 160 --out CMSPlotsMosaic_hires.png
-python3 -I scripts/make_small.py CMSPlotsMosaic_hires.png CMSPlotsMosaic_small.png
+python3 -I scripts/make_lowres.py CMSPlotsMosaic_hires.png CMSPlotsMosaic_lowres.png
 python3 -I scripts/make_pdf.py
+python3 -I scripts/make_vector_pdf.py     # optional vector PDF, only when asked for
 ```
 The full build order, from the paper sources on, is in `README.md`.
 - Without `--reassign` the mosaic script only redraws from `assignment_40.json` (about a minute). This is enough for
   changes to the text box, frame, gaps or image size.
 - Add `--reassign` only when the choice or placement of plots is meant to change (pool, weights, grid, blank
   rectangle). It takes a few minutes and may bring in plots that have not been checked — then do the check by eye.
-- Draw the hi-res image last: it writes `textbox.json`, which `make_pdf.py` reads. Rebuild the PDF after every redraw.
+- Draw the hi-res image last: it writes `textbox.json`, which `make_pdf.py` and `make_vector_pdf.py` read. Rebuild the PDF (and the vector PDF, if it is kept) after every redraw.
 - `python3 -I scripts/contact_sheets.py DIR` writes the sheets of unchecked plots to `DIR`.
 - Scratch files go to `$TMPDIR`, not into this folder.
 - Only `fetch_titles.py` needs the network (`export.arxiv.org`); it sends public arXiv ids and nothing else.

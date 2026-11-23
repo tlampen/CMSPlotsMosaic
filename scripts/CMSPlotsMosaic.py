@@ -277,9 +277,11 @@ def wrap(text, font, width):
     return lines + [cur_]
 f1 = ImageFont.truetype(FB, round(0.66 * u)); f2 = ImageFont.truetype(FR, round(0.29 * u)); f3 = ImageFont.truetype(FR, round(0.21 * u))
 while dr.textlength(TITLE, font=f1) > wid: f1 = ImageFont.truetype(FB, f1.size - 1)
-y = y0; dr.text((x0, y), TITLE, fill=(20, 20, 20), font=f1); y += round(1.3 * f1.size)
+TEXT = []                                                         # every text line as drawn, for make_vector_pdf.py
+def text(xy, s_, fill, font): dr.text(xy, s_, fill=fill, font=font); TEXT.append([xy[0], xy[1], os.path.basename(font.path), font.size, fill, s_])
+y = y0; text((x0, y), TITLE, (20, 20, 20), f1); y += round(1.3 * f1.size)
 for para in BODY:
-    for ln in wrap(para, f2, wid): dr.text((x0, y), ln, fill=(40, 40, 40), font=f2); y += round(1.32 * f2.size)
+    for ln in wrap(para, f2, wid): text((x0, y), ln, (40, 40, 40), f2); y += round(1.32 * f2.size)
     y += round(0.45 * f2.size)
 import qrcode                                                    # QR code, bottom right of the text box
 qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, border=0); qr.add_data(A.url); qr.make(fit=True)
@@ -290,8 +292,13 @@ lgx = qx - round(0.35 * u) - qs                                   # the CMS logo
 canvas.paste(logo0.resize((qs, qs), Image.LANCZOS), (lgx, qy))
 fl = wrap(FOOT, f3, lgx - x0 - round(0.4 * u)); yb = Y1 - round(0.5 * u) - round(1.3 * f3.size) * len(fl)
 assert y <= min(yb, qy - round(0.1 * u)), 'text does not fit the blank rectangle'
-for ln in fl: dr.text((x0, yb), ln, fill=(90, 90, 90), font=f3); yb += round(1.3 * f3.size)
+for ln in fl: text((x0, yb), ln, (90, 90, 90), f3); yb += round(1.3 * f3.size)
 QRBOX = [qx / SIZE, qy / SIZE, (qx + qs) / SIZE, (qy + qs) / SIZE]   # as fractions of the picture, for the PDF link
 out = A.out or f'{HERE}/CMSPlotsMosaic_{SIZE}.png'
-canvas.save(out, optimize=True); json.dump({'qr_box': QRBOX, 'url': A.url}, open(f'{HERE}/textbox.json', 'w'))
+canvas.save(out, optimize=True)
+# textbox.json: QR box as fractions of the picture (make_pdf.py); the whole text box in pixels of this image (make_vector_pdf.py)
+json.dump({'qr_box': QRBOX, 'url': A.url, 'size': SIZE, 'u': u, 'gap': g, 'frame': fw,
+           'border': [X0 + ins, Y0 + ins, X1 - ins, Y1 - ins, th], 'text': TEXT,
+           'qr': {'x': qx, 'y': qy, 'module': k, 'rows': [''.join('1' if v else '0' for v in row) for row in qm]},
+           'logo': [lgx, qy, qs]}, open(f'{HERE}/textbox.json', 'w'))
 print('wrote', out, canvas.size, os.path.getsize(out) // 1024, 'KB;', low, f'plots enlarged by more than 25% from their best source; {len(cards) - nfull} plots do not fill their cell; shape change: largest {100 * np.abs(np.log(asp)).max():.0f}% (log), mean {100 * np.abs(np.log(asp)).mean():.1f}%')

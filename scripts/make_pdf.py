@@ -17,27 +17,35 @@ from reportlab.lib.utils import ImageReader
 import pikepdf
 from pikepdf import Dictionary, Name, Array, String
 Image.MAX_IMAGE_PIXELS = None
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); Q = int(sys.argv[1]) if len(sys.argv) > 1 else 88
-j = json.load(open(f'{HERE}/assignment_40.json')); N = j['params']['n']; tiles = j['tiles']
-titles = json.load(open(f'{HERE}/titles.json')); tb = json.load(open(f'{HERE}/textbox.json'))
-buf = io.BytesIO(); Image.open(f'{HERE}/CMSPlotsMosaic_hires.png').convert('RGB').save(buf, 'JPEG', quality=Q, subsampling=0); buf.seek(0)
-S = 40 / 2.54 * 72; u = S / N                                   # page side and cell size in points
-out = f'{HERE}/CMSPlotsMosaic.pdf'; tmp = io.BytesIO()
-c = canvas.Canvas(tmp, pagesize=(S, S)); c.setTitle(f'CMS physics in {len(tiles)} plots'); c.setAuthor('Plots: CMS Collaboration')
-c.setSubject('Mosaic of the CMS logo; click a plot to open its paper on arXiv, hover to see its title')
-c.drawImage(ImageReader(buf), 0, 0, S, S); c.save(); tmp.seek(0)
-pdf = pikepdf.open(tmp); page = pdf.pages[0]; annots, fields = [], []
-def uri(url): return Dictionary(S=Name.URI, URI=String(url))
-def link(rect, url, text):
-    return pdf.make_indirect(Dictionary(Type=Name.Annot, Subtype=Name.Link, Rect=Array(rect), Border=Array([0, 0, 0]), A=uri(url), Contents=String(text)))
-for n, t in enumerate(tiles):
-    folder = t['key'].split('__')[0]; aid = folder.replace('_', '/'); url = f'https://arxiv.org/abs/{aid}'
-    text = f"{titles.get(folder, '')} (arXiv:{aid})".strip()
-    x, y = t['c'] * u, S - (t['r'] + 1) * u; rect = [round(v, 2) for v in (x, y, x + u, y + u)]   # PDF origin is bottom left
-    annots.append(link(rect, url, text))
-    w = pdf.make_indirect(Dictionary(Type=Name.Annot, Subtype=Name.Widget, FT=Name.Btn, Ff=65536, T=String(f'plot{n}'), TU=String(text),
-                                     Rect=Array(rect), F=0, P=page.obj, A=uri(url), MK=Dictionary(), Border=Array([0, 0, 0])))
-    annots.append(w); fields.append(w)
-q = tb['qr_box']; annots.append(link([round(v, 2) for v in (q[0] * S, S - q[3] * S, q[2] * S, S - q[1] * S)], tb['url'], tb['url']))
-page.Annots = Array(annots); pdf.Root.AcroForm = Dictionary(Fields=Array(fields))
-pdf.save(out); print('wrote', out, os.path.getsize(out) // 1024, 'KB,', len(tiles), 'plots with link and hover text;', sum(1 for t in tiles if t['key'].split('__')[0] not in titles), 'without title')
+HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+def add_links(pdf, page, S, N, tiles, titles, tb):
+    """links and hover buttons of every cell, and the QR-code link, on `page` (a square page of side S points, N x N cells)"""
+    u = S / N; annots, fields = [], []
+    def uri(url): return Dictionary(S=Name.URI, URI=String(url))
+    def link(rect, url, text):
+        return pdf.make_indirect(Dictionary(Type=Name.Annot, Subtype=Name.Link, Rect=Array(rect), Border=Array([0, 0, 0]), A=uri(url), Contents=String(text)))
+    for n, t in enumerate(tiles):
+        folder = t['key'].split('__')[0]; aid = folder.replace('_', '/'); url = f'https://arxiv.org/abs/{aid}'
+        text = f"{titles.get(folder, '')} (arXiv:{aid})".strip()
+        x, y = t['c'] * u, S - (t['r'] + 1) * u; rect = [round(v, 2) for v in (x, y, x + u, y + u)]   # PDF origin is bottom left
+        annots.append(link(rect, url, text))
+        w = pdf.make_indirect(Dictionary(Type=Name.Annot, Subtype=Name.Widget, FT=Name.Btn, Ff=65536, T=String(f'plot{n}'), TU=String(text),
+                                         Rect=Array(rect), F=0, P=page.obj, A=uri(url), MK=Dictionary(), Border=Array([0, 0, 0])))
+        annots.append(w); fields.append(w)
+    q = tb['qr_box']; annots.append(link([round(v, 2) for v in (q[0] * S, S - q[3] * S, q[2] * S, S - q[1] * S)], tb['url'], tb['url']))
+    page.Annots = Array(annots); pdf.Root.AcroForm = Dictionary(Fields=Array(fields))
+
+if __name__ == '__main__':
+    Q = int(sys.argv[1]) if len(sys.argv) > 1 else 88
+    j = json.load(open(f'{HERE}/assignment_40.json')); N = j['params']['n']; tiles = j['tiles']
+    titles = json.load(open(f'{HERE}/titles.json')); tb = json.load(open(f'{HERE}/textbox.json'))
+    buf = io.BytesIO(); Image.open(f'{HERE}/CMSPlotsMosaic_hires.png').convert('RGB').save(buf, 'JPEG', quality=Q, subsampling=0); buf.seek(0)
+    S = 40 / 2.54 * 72                                              # page side in points
+    out = f'{HERE}/CMSPlotsMosaic.pdf'; tmp = io.BytesIO()
+    c = canvas.Canvas(tmp, pagesize=(S, S)); c.setTitle(f'CMS physics in {len(tiles)} plots'); c.setAuthor('Plots: CMS Collaboration')
+    c.setSubject('Mosaic of the CMS logo; click a plot to open its paper on arXiv, hover to see its title')
+    c.drawImage(ImageReader(buf), 0, 0, S, S); c.save(); tmp.seek(0)
+    pdf = pikepdf.open(tmp); page = pdf.pages[0]
+    add_links(pdf, page, S, N, tiles, titles, tb)
+    pdf.save(out); print('wrote', out, os.path.getsize(out) // 1024, 'KB,', len(tiles), 'plots with link and hover text;', sum(1 for t in tiles if t['key'].split('__')[0] not in titles), 'without title')

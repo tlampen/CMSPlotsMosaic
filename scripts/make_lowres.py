@@ -1,5 +1,5 @@
-"""Save a small PNG copy of a big grid image, under a size limit (default 1 MB).
-usage: make_small.py BIG.png SMALL.png [max_bytes]"""
+"""Save a low-resolution PNG copy of a big grid image, under a size limit (default 1 MB).
+usage: make_lowres.py BIG.png LOWRES.png [max_bytes]"""
 import sys, os
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = None
